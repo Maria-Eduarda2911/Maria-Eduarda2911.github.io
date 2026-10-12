@@ -66,9 +66,9 @@
         <div class="section-head">
           <div>
             <div class="section-number">01 / PROJETO EM DESTAQUE</div>
-            <h2>Tecnologia e dados<br>para a Defesa Civil.</h2>
+            <h2>Monitoramento de Hidrometeorologia</h2>
           </div>
-          <p class="section-intro">Trabalho de Conclusão de Curso (TCC): Sistema inteligente de monitoramento de alagamentos para a cidade do Recife.</p>
+          <p class="section-intro">Projetos focados em análise de dados, automação e interfaces que resolvem problemas reais com clareza e escala.</p>
         </div>
 
         <article class="orkut">
@@ -214,10 +214,12 @@
 
     // COLOQUE AQUI OS NOMES EXATOS DOS REPOSITÓRIOS QUE VOCÊ QUER DESTACAR NA SUA LISTA
     const PINNED_REPOS = [
-      'projeto-lpoo',
-      'projeto web',
+      'Brinkeduca-app',
+      'DocLite',
+      'PortfolioOrkut-modelo',
       'projeto-telecentro',
-      'F.Barbearia'
+      'Proxmox',
+      'OpenVpn'
     ];
 
     function escapeHTML(value = '') {
@@ -296,9 +298,23 @@
     }
 
     async function fetchText(url) {
-      const response = await fetch(url, { cache: 'no-store' });
+      const response = await fetch(url, {
+        cache: 'no-store',
+        headers: { 'Accept': 'application/vnd.github.v3.raw' }
+      });
       if (!response.ok) throw new Error(`${response.status}`);
       return response.text();
+    }
+
+    async function fetchJson(url) {
+      const response = await fetch(url, {
+        headers: {
+          'Accept': 'application/vnd.github+json',
+          'User-Agent': 'Maria-Eduarda-Portfolio'
+        }
+      });
+      if (!response.ok) throw new Error(`${response.status}`);
+      return response.json();
     }
 
     async function fetchRepoReadme(repo) {
@@ -373,22 +389,34 @@
       }
 
       try {
-        const cached = localStorage.getItem(CACHE_KEY);
-        const cachedTime = localStorage.getItem(CACHE_KEY + '-time');
         let allRepos = [];
 
-        if (cached && cachedTime && (Date.now() - Number(cachedTime) < CACHE_TTL)) {
-          allRepos = JSON.parse(cached);
-        } else {
-          const res = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`);
-          if (!res.ok) throw new Error('Erro ao buscar repositórios');
-          allRepos = await res.json();
-          localStorage.setItem(CACHE_KEY, JSON.stringify(allRepos));
-          localStorage.setItem(CACHE_KEY + '-time', Date.now().toString());
+        try {
+          const cached = localStorage.getItem(CACHE_KEY);
+          const cachedTime = localStorage.getItem(CACHE_KEY + '-time');
+          if (cached && cachedTime && (Date.now() - Number(cachedTime) < CACHE_TTL)) {
+            allRepos = JSON.parse(cached);
+          }
+        } catch (_) {
+          allRepos = [];
         }
 
-        // Filtra apenas os repositórios que estão na lista PINNED_REPOS
-        const repos = allRepos.filter(r => PINNED_REPOS.includes(r.name));
+        if (!allRepos.length) {
+          allRepos = await fetchJson(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`);
+          try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify(allRepos));
+            localStorage.setItem(CACHE_KEY + '-time', Date.now().toString());
+          } catch (_) {}
+        }
+
+        const repoOrder = new Map(PINNED_REPOS.map((name, index) => [name.toLowerCase(), index]));
+        const repos = allRepos
+          .filter((r) => PINNED_REPOS.some((name) => name.toLowerCase() === String(r.name).toLowerCase()))
+          .sort((a, b) => {
+            const left = repoOrder.get(String(a.name).toLowerCase()) ?? Number.MAX_SAFE_INTEGER;
+            const right = repoOrder.get(String(b.name).toLowerCase()) ?? Number.MAX_SAFE_INTEGER;
+            return left - right;
+          });
 
         if (!repos.length) {
           grid.innerHTML = '<div class="loading">Nenhum repositório em destaque encontrado na lista.</div>';
@@ -396,8 +424,9 @@
         }
 
         grid.innerHTML = '';
-        for (const repo of repos) {
-          const info = await fetchRepoReadme(repo);
+        const repoInfos = await Promise.all(repos.map(async (repo) => ({ repo, info: await fetchRepoReadme(repo) })));
+
+        for (const { repo, info } of repoInfos) {
           const coverImage = info.images[0]?.url || '';
           const card = document.createElement('div');
           card.className = 'project-card';
@@ -409,7 +438,7 @@
             <div class="project-body">
               <div class="project-meta">
                 <span>⭐ ${repo.stargazers_count}</span>
-                <span>${repo.language || 'Code'}</span>
+                <span>${escapeHTML(repo.language || 'Code')}</span>
               </div>
               <h3 class="project-title">${escapeHTML(repo.name)}</h3>
               <p class="project-desc">${escapeHTML(repo.description || 'Sem descrição cadastrada.')}</p>
