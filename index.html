@@ -66,17 +66,17 @@
         <div class="section-head">
           <div>
             <div class="section-number">01 / PROJETO EM DESTAQUE</div>
-            <h2>Sistema de monitoramento de alagemento em Recife.</h2>
+            <h2>Tecnologia e dados<br>para a Defesa Civil.</h2>
           </div>
           <p class="section-intro">Trabalho de Conclusão de Curso (TCC): Sistema inteligente de monitoramento de alagamentos para a cidade do Recife.</p>
         </div>
 
-        <article class="orkut" style="background: linear-gradient(135deg, #191a18, #111210);">
-          <div class="orkut-grid" style="grid-template-columns: 1fr 1fr;">
+        <article class="orkut">
+          <div class="orkut-grid">
             <div class="orkut-copy">
               <div>
                 <div class="project-index">01 — TCC / ADS</div>
-                <div class="orkut-kicker" style="margin-top:20px; color: var(--accent);">Monitoramento Urbano & Resiliência</div>
+                <div class="orkut-kicker" style="margin-top:20px;">Monitoramento Urbano & Resiliência</div>
                 <h3>Sistema <span>S.M.A.R.</span></h3>
                 <p class="orkut-description">
                   Prova de conceito (PoC) desenvolvida para monitorar riscos de alagamento em tempo real no Recife. Integra dados oficiais da APAC, arquitetura <i>serverless</i> com Python/FastAPI e espacialização de riscos por bairros via interpolação IDW.
@@ -90,32 +90,36 @@
                 </div>
               </div>
               <div style="display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap;">
-                <a class="btn dark" href="https://dash-alagamento-tawny.vercel.app/" target="_blank" rel="noreferrer" style="background: var(--accent); border-color: var(--accent);">acessar dashboard ↗</a>
+                <a class="btn dark" href="https://dash-alagamento-tawny.vercel.app/" target="_blank" rel="noreferrer" style="background: var(--accent); border-color: var(--accent); color: #fff;">acessar dashboard ↗</a>
               </div>
             </div>
 
-            <!-- MOCKUP DO DASHBOARD EM CSS -->
-            <div class="orkut-visual" style="padding: 30px;">
-              <div class="browser" aria-label="Prévia do S.M.A.R." style="transform: none; max-width: 100%;">
-                <div class="browser-top"><i></i><i></i><i></i><span style="font-family:'DM Mono',monospace; font-size:9px; color:#777; margin-left:8px;">dash-alagamento.vercel.app</span></div>
-                <div class="browser-screen smart-dash-screen">
-                  <div class="dash-sidebar">
-                    <div class="dash-bar-title">FILTRAR RISCO</div>
-                    <div class="dash-bar-pill"></div>
-                    <div class="dash-bar-pill short"></div>
-                    <div class="dash-bar-title" style="margin-top:12px;">ÁREAS MONITORADAS</div>
-                    <div class="dash-row"><span class="bairro">Curado</span><span class="badge-baixo">BAIXO</span></div>
-                    <div class="dash-row"><span class="bairro">Dois Unidos</span><span class="badge-baixo">BAIXO</span></div>
-                    <div class="dash-row"><span class="bairro">Varzea</span><span class="badge-baixo">BAIXO</span></div>
+            <!-- MOCKUP DO DASHBOARD EM CSS CORRIGIDO -->
+            <div class="orkut-visual">
+              <div class="browser" aria-label="Prévia do S.M.A.R.">
+                <div class="browser-top"><i></i><i></i><i></i><span style="font-family:'DM Mono',monospace; font-size:9px; color:#555; margin-left:8px;">dash-alagamento.vercel.app</span></div>
+                <div class="dash-screen-mockup">
+                  <div class="dash-sidebar-mockup">
+                    <div class="d-title">Filtrar por Risco</div>
+                    <div class="d-line w-full"></div>
+                    <div class="d-title" style="margin-top:10px;">Áreas de Risco</div>
+                    <div class="d-item"><span>Curado</span><span class="d-badge">BAIXO</span></div>
+                    <div class="d-item"><span>Dois Unidos</span><span class="d-badge">BAIXO</span></div>
+                    <div class="d-item"><span>Varzea</span><span class="d-badge">BAIXO</span></div>
                   </div>
-                  <div class="dash-map-area">
-                    <div class="map-polygon"></div>
-                    <div class="dash-widgets">
-                      <div class="widget-box">
-                        <span class="w-num">94</span>
-                        <span class="w-lbl">Bairros</span>
+                  <div class="dash-main-mockup">
+                    <div class="d-map-card">
+                      <div class="radar-pulse"></div>
+                      <span class="d-map-text">RECIFE — MONITORAMENTO AO VIVO</span>
+                    </div>
+                    <div class="d-bottom-stats">
+                      <div class="d-mini-stat"><span>94</span><b>Bairros</b></div>
+                      <div class="d-mini-chart">
+                        <div class="c-bar" style="height:60%;"></div>
+                        <div class="c-bar" style="height:40%;"></div>
+                        <div class="c-bar" style="height:85%;"></div>
+                        <div class="c-bar" style="height:50%;"></div>
                       </div>
-                      <div class="widget-donut"></div>
                     </div>
                   </div>
                 </div>
@@ -126,17 +130,18 @@
         </article>
       </section>
 
+      <!-- APENAS OS REPOSITÓRIOS DESTAQUE DO PERFIL -->
       <section id="repositorios">
         <div class="section-head">
           <div>
             <div class="section-number">02 / CÓDIGO</div>
             <h2>Feito, quebrado,<br>refeito.</h2>
           </div>
-          <p class="section-intro">Os projetos abaixo são buscados diretamente do GitHub. A capa e as imagens internas são lidas dos README.md.</p>
+          <p class="section-intro">Repositórios em destaque selecionados do meu perfil no GitHub, com leitura dinâmica de README e mídias.</p>
         </div>
         <div id="local-file-warning" class="local-file-warning"><strong>Modo arquivo local detectado.</strong> Para evitar bloqueios do navegador, abra este portfólio pelo servidor local: <code>python3 -m http.server 8000</code> e acesse <code>http://localhost:8000</code>.</div>
         <div id="projects-grid" class="projects-grid">
-          <div class="loading">CARREGANDO REPOSITÓRIOS DO GITHUB...</div>
+          <div class="loading">CARREGANDO REPOSITÓRIOS EM DESTAQUE...</div>
         </div>
       </section>
 
@@ -204,8 +209,16 @@
 
   <script>
     const GITHUB_USERNAME = 'Maria-Eduarda2911';
-    const CACHE_KEY = 'maria-portfolio-github-v6';
+    const CACHE_KEY = 'maria-portfolio-github-v7';
     const CACHE_TTL = 1000 * 60 * 10;
+
+    // COLOQUE AQUI OS NOMES EXATOS DOS REPOSITÓRIOS QUE VOCÊ QUER DESTACAR NA SUA LISTA
+    const PINNED_REPOS = [
+      'projeto-lpoo',
+      'projeto web',
+      'projeto-telecentro',
+      'F.Barbearia'
+    ];
 
     function escapeHTML(value = '') {
       return String(value).replace(/[&<>"']/g, char => ({
@@ -331,7 +344,7 @@
         <p class="readme-description">${escapeHTML(description)}</p>
         ${shots}
         <div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap;">
-          <a class="btn dark" href="${escapeHTML(repo.html_url)}" target="_blank" rel="noreferrer">Ver no GitHub ↗</a>
+          <a class="btn dark" href="${escapeHTML(repo.html_url)}" target="_blank" rel="noreferrer" style="color:#fff;">Ver no GitHub ↗</a>
         </div>
       `;
       modal.classList.add('is-open');
@@ -362,21 +375,23 @@
       try {
         const cached = localStorage.getItem(CACHE_KEY);
         const cachedTime = localStorage.getItem(CACHE_KEY + '-time');
-        let repos = [];
+        let allRepos = [];
 
         if (cached && cachedTime && (Date.now() - Number(cachedTime) < CACHE_TTL)) {
-          repos = JSON.parse(cached);
+          allRepos = JSON.parse(cached);
         } else {
-          const res = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=12`);
+          const res = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`);
           if (!res.ok) throw new Error('Erro ao buscar repositórios');
-          const data = await res.json();
-          repos = data.filter(r => !r.fork);
-          localStorage.setItem(CACHE_KEY, JSON.stringify(repos));
+          allRepos = await res.json();
+          localStorage.setItem(CACHE_KEY, JSON.stringify(allRepos));
           localStorage.setItem(CACHE_KEY + '-time', Date.now().toString());
         }
 
+        // Filtra apenas os repositórios que estão na lista PINNED_REPOS
+        const repos = allRepos.filter(r => PINNED_REPOS.includes(r.name));
+
         if (!repos.length) {
-          grid.innerHTML = '<div class="loading">Nenhum repositório público encontrado.</div>';
+          grid.innerHTML = '<div class="loading">Nenhum repositório em destaque encontrado na lista.</div>';
           return;
         }
 
