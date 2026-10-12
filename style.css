@@ -473,7 +473,8 @@ section {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-height: 100%;
+  height: 100%;
+  min-height: 420px;
   border: 1px solid var(--line);
   border-radius: 20px;
   background: rgba(17,24,33,0.8);
@@ -488,15 +489,18 @@ section {
 
 .project-image {
   position: relative;
-  aspect-ratio: 16 / 10;
+  height: 220px;
+  min-height: 220px;
   background: linear-gradient(135deg, #182430 0%, #101820 100%);
   border-bottom: 1px solid var(--line);
+  overflow: hidden;
 }
 
 .project-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
 }
 
 .no-image {
@@ -517,6 +521,7 @@ section {
   flex: 1;
   flex-direction: column;
   padding: 18px 18px 16px;
+  justify-content: flex-start;
 }
 
 .project-meta {
@@ -538,6 +543,10 @@ section {
   margin: 0;
   color: var(--text-soft);
   min-height: 52px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .project-readme {

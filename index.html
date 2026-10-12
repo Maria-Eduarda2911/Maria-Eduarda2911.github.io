@@ -431,6 +431,10 @@
           const card = document.createElement('div');
           card.className = 'project-card';
 
+          const repoDescription = repo.name === 'OpenVpn'
+            ? 'Scripts para automatizar a criação de usuários, edição de perfis e geração de arquivos .ovpn.'
+            : repo.description || 'Sem descrição cadastrada.';
+
           card.innerHTML = `
             <div class="project-image">
               ${coverImage ? `<img src="${escapeHTML(coverImage)}" alt="${escapeHTML(repo.name)}" loading="lazy" referrerpolicy="no-referrer">` : `<div class="no-image">${escapeHTML(repo.name)}</div>`}
@@ -441,7 +445,7 @@
                 <span>${escapeHTML(repo.language || 'Code')}</span>
               </div>
               <h3 class="project-title">${escapeHTML(repo.name)}</h3>
-              <p class="project-desc">${escapeHTML(repo.description || 'Sem descrição cadastrada.')}</p>
+              <p class="project-desc">${escapeHTML(repoDescription)}</p>
               <div class="project-readme">
                 <span class="count">README</span>
                 <span>${info.images.length} imagem(ns)</span>
