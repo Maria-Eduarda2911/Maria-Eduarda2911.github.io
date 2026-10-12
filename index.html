@@ -207,13 +207,12 @@
     </div>
   </div>
 
-  <script>
+ <script>
     const GITHUB_USERNAME = 'Maria-Eduarda2911';
-    const CACHE_KEY = 'maria-portfolio-github-v7';
+    const CACHE_KEY = 'maria-portfolio-github-v8';
     const CACHE_TTL = 1000 * 60 * 10;
 
-    // COLOQUE AQUI OS NOMES EXATOS DOS REPOSITÓRIOS QUE VOCÊ QUER DESTACAR NA SUA LISTA
-    // Lista exata dos seus repositórios pinados no GitHub
+    // Seus repositórios pinados oficiais
     const PINNED_REPOS = [
       'Maria-Eduarda2911.github.io',
       'projeto-telecentro',
@@ -221,6 +220,7 @@
       'PortfolioOrkut-modelo',
       'DocLite',
       'OpenVpn'
+    ];
 
     function escapeHTML(value = '') {
       return String(value).replace(/[&<>"']/g, char => ({
@@ -298,23 +298,9 @@
     }
 
     async function fetchText(url) {
-      const response = await fetch(url, {
-        cache: 'no-store',
-        headers: { 'Accept': 'application/vnd.github.v3.raw' }
-      });
+      const response = await fetch(url, { cache: 'no-store' });
       if (!response.ok) throw new Error(`${response.status}`);
       return response.text();
-    }
-
-    async function fetchJson(url) {
-      const response = await fetch(url, {
-        headers: {
-          'Accept': 'application/vnd.github+json',
-          'User-Agent': 'Maria-Eduarda-Portfolio'
-        }
-      });
-      if (!response.ok) throw new Error(`${response.status}`);
-      return response.json();
     }
 
     async function fetchRepoReadme(repo) {
@@ -389,51 +375,44 @@
       }
 
       try {
-        let allRepos = [];
+        const cached = localStorage.getItem(CACHE_KEY);
+        const cachedTime = localStorage.getItem(CACHE_KEY + '-time');
+        let repos = [];
 
-        try {
-          const cached = localStorage.getItem(CACHE_KEY);
-          const cachedTime = localStorage.getItem(CACHE_KEY + '-time');
-          if (cached && cachedTime && (Date.now() - Number(cachedTime) < CACHE_TTL)) {
-            allRepos = JSON.parse(cached);
-          }
-        } catch (_) {
-          allRepos = [];
-        }
-
-        if (!allRepos.length) {
-          allRepos = await fetchJson(`https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`);
-          try {
-            localStorage.setItem(CACHE_KEY, JSON.stringify(allRepos));
-            localStorage.setItem(CACHE_KEY + '-time', Date.now().toString());
-          } catch (_) {}
-        }
-
-        const repoOrder = new Map(PINNED_REPOS.map((name, index) => [name.toLowerCase(), index]));
-        const repos = allRepos
-          .filter((r) => PINNED_REPOS.some((name) => name.toLowerCase() === String(r.name).toLowerCase()))
-          .sort((a, b) => {
-            const left = repoOrder.get(String(a.name).toLowerCase()) ?? Number.MAX_SAFE_INTEGER;
-            const right = repoOrder.get(String(b.name).toLowerCase()) ?? Number.MAX_SAFE_INTEGER;
-            return left - right;
+        if (cached && cachedTime && (Date.now() - Number(cachedTime) < CACHE_TTL)) {
+          repos = JSON.parse(cached);
+        } else {
+          // Busca cada repositório pinado individualmente e em paralelo para garantir 100% de assertividade
+          const repoPromises = PINNED_REPOS.map(async (repoName) => {
+            try {
+              const res = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${repoName}`);
+              if (!res.ok) return null;
+              return await res.json();
+            } catch {
+              return null;
+            }
           });
 
+          const results = await Promise.all(repoPromises);
+          repos = results.filter(r => r !== null);
+
+          if (repos.length > 0) {
+            localStorage.setItem(CACHE_KEY, JSON.stringify(repos));
+            localStorage.setItem(CACHE_KEY + '-time', Date.now().toString());
+          }
+        }
+
         if (!repos.length) {
-          grid.innerHTML = '<div class="loading">Nenhum repositório em destaque encontrado na lista.</div>';
+          grid.innerHTML = '<div class="loading">Nenhum repositório em destaque encontrado. Verifique se os nomes na lista coincidem com o GitHub.</div>';
           return;
         }
 
         grid.innerHTML = '';
-        const repoInfos = await Promise.all(repos.map(async (repo) => ({ repo, info: await fetchRepoReadme(repo) })));
-
-        for (const { repo, info } of repoInfos) {
+        for (const repo of repos) {
+          const info = await fetchRepoReadme(repo);
           const coverImage = info.images[0]?.url || '';
           const card = document.createElement('div');
           card.className = 'project-card';
-
-          const repoDescription = repo.name === 'OpenVpn'
-            ? 'Scripts para automatizar a criação de usuários, edição de perfis e geração de arquivos .ovpn.'
-            : repo.description || 'Sem descrição cadastrada.';
 
           card.innerHTML = `
             <div class="project-image">
@@ -442,10 +421,10 @@
             <div class="project-body">
               <div class="project-meta">
                 <span>⭐ ${repo.stargazers_count}</span>
-                <span>${escapeHTML(repo.language || 'Code')}</span>
+                <span>${repo.language || 'Code'}</span>
               </div>
               <h3 class="project-title">${escapeHTML(repo.name)}</h3>
-              <p class="project-desc">${escapeHTML(repoDescription)}</p>
+              <p class="project-desc">${escapeHTML(repo.description || 'Sem descrição cadastrada.')}</p>
               <div class="project-readme">
                 <span class="count">README</span>
                 <span>${info.images.length} imagem(ns)</span>
