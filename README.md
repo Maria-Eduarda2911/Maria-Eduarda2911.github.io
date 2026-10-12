@@ -23,6 +23,8 @@ Este é o código-fonte do meu portfólio pessoal de 2026. A ideia foi criar um 
 
 O site consome diretamente a **API do GitHub** para carregar os meus repositórios públicos, lê os `README.md` e extrai automaticamente as imagens e prints das pastas do projeto para exibi-las em um modal interativo.
 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/0d3006a4-d519-4dd9-b694-9ae1fc935700" />
+
 ---
 
 ## 🛠️ Tecnologias e Ferramentas Utilizadas
