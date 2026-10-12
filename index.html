@@ -207,22 +207,23 @@
     </div>
   </div>
 
- <script>
+<script>
     const GITHUB_USERNAME = 'Maria-Eduarda2911';
-    const CACHE_KEY = 'maria-portfolio-github-v8';
+    const CACHE_KEY = 'maria-portfolio-github-v10';
     const CACHE_TTL = 1000 * 60 * 10;
 
+    // SUA LISTA EXATA DE PROJETOS
     const PINNED_REPOS = [
-  'Maria-Eduarda2911.github.io',
-  'projeto-telecentro',
-  'SidebarNote',
-  'PortfolioOrkut-modelo',
-  'DocLite',
-  'OpenVpn',
-  'Proxmox',
-  'Brinkeduca-app',
-  'isc-dhcp'
-];
+      'Maria-Eduarda2911.github.io',
+      'projeto-telecentro',
+      'SidebarNote',
+      'PortfolioOrkut-modelo',
+      'DocLite',
+      'OpenVpn',
+      'Proxmox',
+      'Brinkeduca-app',
+      'isc-dhcp'
+    ];
 
     function escapeHTML(value = '') {
       return String(value).replace(/[&<>"']/g, char => ({
@@ -384,7 +385,7 @@
         if (cached && cachedTime && (Date.now() - Number(cachedTime) < CACHE_TTL)) {
           repos = JSON.parse(cached);
         } else {
-          // Busca cada repositório pinado individualmente e em paralelo para garantir 100% de assertividade
+          // Busca cada repositório da lista individualmente
           const repoPromises = PINNED_REPOS.map(async (repoName) => {
             try {
               const res = await fetch(`https://api.github.com/repos/${GITHUB_USERNAME}/${repoName}`);
@@ -405,7 +406,7 @@
         }
 
         if (!repos.length) {
-          grid.innerHTML = '<div class="loading">Nenhum repositório em destaque encontrado. Verifique se os nomes na lista coincidem com o GitHub.</div>';
+          grid.innerHTML = '<div class="loading">Nenhum repositório encontrado. Verifique se todos os nomes da lista estão públicos no GitHub.</div>';
           return;
         }
 
